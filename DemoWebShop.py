@@ -6,35 +6,39 @@ import unittest, time, re
 
 
 
-class AppDynamicsJob(unittest.TestCase):
+class AddToCardTests(unittest.TestCase):
     def setUp(self):
 
         self.wd = webdriver.Firefox()
         self.wd.implicitly_wait(30)
 
 
-    def test_app_dynamics_job(self):
+    def test_add_to_card(self):
         wd = self.wd
+        self.open_home_page(wd)
+        self.login(wd, username="qakostina@gmail.com", password="test2test")
+        self.add_to_card(wd)
+        self.log_out(wd)
+
+    def open_home_page(self, wd):
         wd.get("http://demowebshop.tricentis.com/")
-        self.Login(wd)
-        wd.find_element_by_link_text("Computers").click()
-        wd.find_element_by_xpath("//img[@alt='Picture for category Notebooks']").click()
-        wd.find_element_by_xpath("//input[@value='Add to cart']").click()
+
+    def add_to_card(self, wd): #добавляем в корзину 2 товара
+        wd.find_element_by_link_text("Computers").click() #Перешли в раздел товаров 1
+        wd.find_element_by_xpath("//img[@alt='Picture for category Notebooks']").click() #выбрали товар по картинке
+        wd.find_element_by_xpath("//input[@value='Add to cart']").click() #кнопка Добавить в корзину
         # wd.find_element_by_xpath("//li[@id='topcartlink']/a/span").click()
+        wd.find_element_by_link_text("Books").click() #Перешли в раздел товаров 2
+        wd.find_element_by_link_text("Fiction").click() #выбрали товар по названию-ссылке
+        wd.find_element_by_xpath("//input[@value='Add to cart']").click() #кнопка Добавить в корзину
 
-        wd.find_element_by_link_text("Books").click()
-        wd.find_element_by_link_text("Fiction").click()
-        wd.find_element_by_xpath("//input[@value='Add to cart']").click()
-
-        self.LogOut(wd)
-
-    def LogOut(self, wd):
+    def log_out(self, wd):
         wd.find_element_by_link_text("Log out").click()
 
-    def Login(self, wd):
+    def login(self, wd, username, password):
         wd.find_element_by_link_text("Log in").click()
-        wd.find_element_by_id("Email").send_keys("qakostina@gmail.com")
-        wd.find_element_by_id("Password").send_keys("test2test")
+        wd.find_element_by_id("Email").send_keys(username)
+        wd.find_element_by_id("Password").send_keys(password)
         wd.find_element_by_xpath("//input[@value='Log in']").click()
 
 
